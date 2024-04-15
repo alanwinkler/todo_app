@@ -6,8 +6,10 @@
     </tr>
     {% for task in tasks %}
     <tr>
-        <td>{{task.title}}</td>
+        <td>{{ task.id }} {{task.title}}</td>
         <td><a href="{% url 'task_detail' task.id %}">View</a></td>
+        <td><a href="{% url 'task_create' %}">Add</a></td>
+        <td><a href="{% url 'task_update' task.id %}">Update</a></td>
     </tr>
     {% empty %}
     <h3>No items in list</h3>
