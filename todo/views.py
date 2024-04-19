@@ -21,6 +21,7 @@ class TaskList(LoginRequiredMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['count'] = context['tasks'].filter(complete=False).count()
         tasks = Task.objects.filter(user=self.request.user)
 
         search_input = self.request.GET.get('search-area') or ''
@@ -34,45 +35,12 @@ class TaskList(LoginRequiredMixin, ListView):
                 'title': task.title,
                 'description': task.description,
                 'complete': task.complete,
-                # Add other fields as needed
             }
             task_dicts.append(task_dict)
             context['tasks'] = task_dicts  # Use a descriptive name like 'task_list'
             context['search_input'] = search_input
             print(task_dict)
-        return context
-
-
-
-    
-    # def get_context_data(self, **kwargs): 
-    #     context = super().get_context_data(**kwargs)
-    #     context['task'] = Task.objects.filter(user=self.request.user)
-    #     context['count'] = context['task'].filter(complete=False).count()
-
-    #     search_input = self.request.GET.get('search-area') or ''
-    #     tasks = Task.objects.filter(user=self.request.user)
-
-    #     if search_input:
-    #         context['task'] = context['task'].filter(title__icontains=search_input)
-    #         # print(context['task'])
-
-    #         context['search_input'] = search_input
-    #         task_dicts = []
-    #         for task in tasks:
-    #             task_dict = {
-    #             'id': task.id,
-    #             'title': task.title,
-    #             'description': task.description,
-    #             'complete': task.complete
-    #             # Add other fields as needed
-    #             }
-    #         task_dicts.append(task_dict)
-    #         print(task_dict)
-    #         return task_dict
-    #     return context
-
-    
+        return context   
 
 class TaskDetail(LoginRequiredMixin, DetailView):
     model = Task
